@@ -1,0 +1,1874 @@
+openapi: 3.0.3
+info:
+  title: Jasper AI API
+  description: |
+    Jasper AI is a marketing AI content generation platform. The API provides access to
+    AI-powered content generation, agent tasks, knowledge management, brand voice/tone control,
+    style guides, documents, image processing, audiences, and usage tracking.
+    Authentication uses the X-API-Key header with your API key.
+  version: '1.0.0'
+  contact:
+    name: Jasper AI
+    url: https://developers.jasper.ai
+servers:
+  - url: https://api.jasper.ai/v1
+    description: Production server
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    # ─── Command ───
+    CommandRequest:
+      type: object
+      required:
+        - inputs
+      properties:
+        inputs:
+          $ref: '#/components/schemas/CommandInputs'
+        options:
+          $ref: '#/components/schemas/CommandOptions'
+    CommandInputs:
+      type: object
+      required:
+        - command
+      properties:
+        command:
+          type: string
+          description: Your instruction for Jasper (e.g., "Write a haiku about rabbits").
+        context:
+          type: string
+          description: Background information for the generation.
+        knowledgeIds:
+          type: array
+          items:
+            type: string
+          maxItems: 3
+          description: References to knowledge items for content personalization.
+        styleId:
+          type: string
+          description: Style guide identifier for output formatting.
+        toneId:
+          type: string
+          description: Voice/tone identifier for output character.
+        audienceId:
+          type: string
+          description: Target audience identifier.
+        retrievalAddOn:
+          type: string
+          enum:
+            - webScraper
+            - webSearch
+          description: External data enhancement method.
+    CommandOptions:
+      type: object
+      properties:
+        outputCount:
+          type: integer
+          default: 1
+          description: Number of outputs to generate.
+        outputLanguage:
+          type: string
+          default: English
+          description: Language for the generated output.
+        inputLanguage:
+          type: string
+          default: English
+          description: Language of the input command.
+        languageFormality:
+          type: string
+          enum:
+            - default
+            - more
+            - less
+          description: Formality level of the output.
+        webScraper:
+          $ref: '#/components/schemas/WebScraperOptions'
+        webSearch:
+          $ref: '#/components/schemas/WebSearchOptions'
+        completionType:
+          type: string
+          enum:
+            - performance
+            - quality
+          default: performance
+          description: Completion quality trade-off.
+    WebScraperOptions:
+      type: object
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+          maxItems: 3
+          description: URLs to scrape for context.
+    WebSearchOptions:
+      type: object
+      properties:
+        siteBlockList:
+          type: array
+          items:
+            type: string
+          description: Sites to exclude from search.
+        searchQuery:
+          type: string
+          description: Custom search query override.
+        maxResults:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Maximum number of web search results.
+    CommandResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+          description: Unique request identifier.
+        resource:
+          type: string
+          example: content
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneratedContent'
+    GeneratedContent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique content identifier (prefixed with txt_).
+        text:
+          type: string
+          description: The generated content text.
+
+    # ─── Tasks ───
+    TaskContextItemPredefined:
+      type: object
+      required:
+        - id
+        - value
+      properties:
+        id:
+          type: string
+          description: Context item ID.
+        value:
+          type: string
+          description: Context item value (format depends on context item type).
+    TaskContextItemCustom:
+      type: object
+      required:
+        - name
+        - question
+        - answer
+      properties:
+        name:
+          type: string
+          description: Name/label of custom context item.
+        question:
+          type: string
+          description: Question/prompt for the context item.
+        answer:
+          type: string
+          description: Value/answer for custom context item.
+        priority:
+          type: number
+          default: 0
+          description: Priority level (higher = more important).
+    TaskRunRequest:
+      type: object
+      required:
+        - contextItems
+      properties:
+        contextItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskContextItemPredefined'
+          description: Array of context items for task execution.
+        version:
+          type: number
+          description: Agent task version (defaults to latest).
+        toLanguage:
+          type: string
+          description: Target output language (defaults to EN-US).
+        knowledgeIds:
+          type: array
+          items:
+            type: string
+          description: Knowledge IDs for context.
+        toneId:
+          type: string
+          description: Tone ID for brand voice.
+        audienceId:
+          type: string
+          description: Audience ID for customization.
+        styleGuideId:
+          type: string
+          description: Style Guide ID for writing rules.
+        tools:
+          type: array
+          items:
+            type: string
+            enum:
+              - WEB_SEARCH
+              - KNOWLEDGE_SEARCH
+          default: []
+          description: Tools to enable for execution.
+    TaskOutput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - TEXT
+          description: Output item type.
+        value:
+          type: string
+          description: Output content value.
+    TaskRunResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Unique request identifier.
+        resource:
+          type: string
+          example: tasks
+        data:
+          type: object
+          properties:
+            output:
+              type: array
+              items:
+                $ref: '#/components/schemas/TaskOutput'
+              description: Array of output items generated by agent.
+    TaskContextItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+            - TEXTAREA
+            - INPUT
+            - TAGS_INPUT
+            - SELECT
+            - MULTISELECT
+            - CUSTOM
+            - KNOWLEDGE
+            - IMAGE_ID
+            - TOOL
+            - CHECKBOX
+        question:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        tooltip:
+          type: string
+          nullable: true
+        required:
+          type: boolean
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique task identifier.
+        name:
+          type: string
+          description: Task display name.
+        description:
+          type: string
+          description: Brief task description.
+        contextItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskContextItem'
+          description: Required input fields for execution.
+        version:
+          type: number
+          description: Version number.
+        scope:
+          type: string
+          enum:
+            - USER
+            - WORKSPACE
+            - PUBLIC
+          description: Task visibility scope.
+        updatedAt:
+          type: string
+          format: date-time
+          description: ISO timestamp of last update.
+        createdAt:
+          type: string
+          format: date-time
+          description: ISO timestamp of creation.
+        longDescription:
+          type: string
+          nullable: true
+          description: Extended markdown description.
+        publishedAt:
+          type: string
+          nullable: true
+          description: ISO timestamp when published.
+        categories:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Associated category tags.
+        customFields:
+          type: object
+          nullable: true
+          description: Custom metadata.
+        theme:
+          type: string
+          nullable: true
+          description: Theme identifier.
+    Pagination:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          description: Total available records.
+        page:
+          type: integer
+          description: Current page number.
+        pageSize:
+          type: integer
+          description: Records per page.
+        next:
+          type: string
+          nullable: true
+          description: Next page indicator.
+        prev:
+          type: string
+          nullable: true
+          description: Previous page indicator.
+    TaskListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: tasks
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    TaskGetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: tasks
+        data:
+          $ref: '#/components/schemas/Task'
+
+    # ─── Knowledge ───
+    KnowledgeSettings:
+      type: object
+      properties:
+        appVisibility:
+          type: string
+          enum:
+            - visible
+            - hidden
+          default: visible
+          description: Whether the knowledge item is available in the Jasper app.
+        autoSummary:
+          type: boolean
+          default: true
+          description: Whether to auto-generate a summary.
+    KnowledgeItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique knowledge item identifier (prefixed with kno_).
+        name:
+          type: string
+          description: Friendly name of the knowledge item.
+        file:
+          type: string
+          description: Filename or signed URL.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key-value metadata pairs.
+        settings:
+          $ref: '#/components/schemas/KnowledgeSettings'
+        summary:
+          type: string
+          description: Knowledge item summary.
+        tags:
+          type: array
+          items:
+            type: string
+          description: Searchable tags.
+        processingState:
+          type: string
+          description: Processing state (e.g., InProgress, Completed).
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    KnowledgeResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: knowledge
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/KnowledgeItem'
+    KnowledgeItemResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: knowledge
+        data:
+          $ref: '#/components/schemas/KnowledgeItem'
+    KnowledgeUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Updated name (max 100 chars).
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Updated metadata key-value pairs.
+        settings:
+          $ref: '#/components/schemas/KnowledgeSettings'
+        summary:
+          type: string
+          description: Updated summary.
+        tags:
+          type: array
+          items:
+            type: string
+          description: Updated tags.
+    KnowledgeSearchRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: Natural language search query.
+    RelevantChunk:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The content of the relevant chunk.
+        score:
+          type: number
+          description: Relevance score (0-1, where 1 is most relevant).
+    KnowledgeSearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Knowledge item identifier.
+        name:
+          type: string
+          description: Knowledge item name.
+        summary:
+          type: string
+          description: Knowledge item summary.
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags associated with the item.
+        relevantChunks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelevantChunk'
+          description: Relevant content chunks ordered by relevance.
+    KnowledgeSearchResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: knowledge
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/KnowledgeSearchResult'
+
+    # ─── Voices (Tones) ───
+    VoiceCreateRequest:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          description: The friendly name of the voice.
+        value:
+          type: string
+          description: The voice's description.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Optional key-value pairs.
+        settings:
+          $ref: '#/components/schemas/VoiceSettings'
+    VoiceUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Updated voice name.
+        value:
+          type: string
+          description: Updated voice description.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Updated metadata.
+        settings:
+          $ref: '#/components/schemas/VoiceSettings'
+    VoiceSettings:
+      type: object
+      properties:
+        appVisibility:
+          type: string
+          enum:
+            - visible
+            - hidden
+          default: visible
+          description: Whether the voice is available in the Jasper app.
+    Voice:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique voice identifier (prefixed with ton_).
+        name:
+          type: string
+        value:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        settings:
+          $ref: '#/components/schemas/VoiceSettings'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    VoiceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: tone
+        data:
+          $ref: '#/components/schemas/Voice'
+    VoiceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: tones
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Voice'
+
+    # ─── Style Guides ───
+    StyleTerm:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Term type.
+        term:
+          type: string
+          description: The term to match.
+        replaceWith:
+          type: string
+          description: The replacement text.
+    StyleRule:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        enabled:
+          type: boolean
+        description:
+          type: string
+    StyleGuide:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique style guide identifier (prefixed with sty_).
+        name:
+          type: string
+        description:
+          type: string
+        customInstructions:
+          type: string
+          nullable: true
+          description: Free-form custom instructions for the style guide.
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          nullable: true
+          description: The user ID of who created the style guide.
+        updatedAt:
+          type: string
+          format: date-time
+        terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/StyleTerm'
+          description: Term replacement rules.
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/StyleRule'
+          description: Style rules.
+    StyleGuideListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: styles
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StyleGuide'
+    StyleGuideResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: styles
+        data:
+          $ref: '#/components/schemas/StyleGuide'
+
+    # ─── Documents ───
+    DocumentCreateRequest:
+      type: object
+      required:
+        - userId
+        - content
+        - name
+      properties:
+        userId:
+          type: string
+          description: The ID of the user creating the document.
+        content:
+          type: string
+          description: The content of the document.
+        name:
+          type: string
+          description: The name of the document.
+        status:
+          type: string
+          enum:
+            - DRAFT
+            - PUBLISHED
+            - IN_PROGRESS
+            - IN_REVIEW
+            - COMPLETED
+          description: The status of the document.
+    DocumentUpdateRequest:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Updated document content.
+        name:
+          type: string
+          description: Updated document name.
+        status:
+          type: string
+          enum:
+            - DRAFT
+            - PUBLISHED
+            - IN_PROGRESS
+            - IN_REVIEW
+            - COMPLETED
+          description: Updated document status.
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique document identifier.
+        content:
+          type: string
+          description: Document content text.
+        name:
+          type: string
+          description: Document title.
+        status:
+          type: string
+          description: Current document status.
+        userId:
+          type: string
+          description: Associated workspace user ID.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    DocumentListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: documents
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+    DocumentResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: documents
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+
+    # ─── Users ───
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier.
+        firstName:
+          type: string
+          description: User's first name.
+        lastName:
+          type: string
+          description: User's last name.
+        email:
+          type: string
+          description: User's email address.
+    UserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: users
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    UserResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: users
+        data:
+          $ref: '#/components/schemas/User'
+
+    # ─── Audiences ───
+    Audience:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique audience identifier.
+        name:
+          type: string
+          description: Audience name.
+        description:
+          type: string
+          description: Audience description.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    AudienceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: audiences
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Audience'
+    AudienceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: audiences
+        data:
+          $ref: '#/components/schemas/Audience'
+
+    # ─── Usage ───
+    UsageResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        resource:
+          type: string
+          example: usage
+        data:
+          $ref: '#/components/schemas/UsageData'
+    UsageData:
+      type: object
+      properties:
+        wordsGenerated:
+          type: integer
+          description: Total words generated in the period.
+        requestCount:
+          type: integer
+          description: Total API requests in the period.
+        periodStart:
+          type: string
+          format: date-time
+          description: Start of the usage period.
+        periodEnd:
+          type: string
+          format: date-time
+          description: End of the usage period.
+
+    # ─── Error ───
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string
+
+security:
+  - BearerAuth: []
+
+paths:
+  # ─── Command ───
+  /command:
+    post:
+      operationId: command
+      summary: Run a command
+      description: Run a command to generate AI content. The command endpoint provides a flexible way to generate content by passing in a command (prompt) and context.
+      tags:
+        - Command
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommandRequest'
+      responses:
+        '201':
+          description: Content generated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ─── Tasks ───
+  /tasks:
+    get:
+      operationId: listTasks
+      summary: List all agent tasks
+      description: Retrieve a paginated list of agent tasks available in your workspace.
+      tags:
+        - Tasks
+      parameters:
+        - name: size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+          description: Number of tasks per page.
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number (1-indexed).
+        - name: scope
+          in: query
+          schema:
+            type: string
+            enum:
+              - USER
+              - WORKSPACE
+              - PUBLIC
+          description: Filter by task scope.
+        - name: includeContextItems
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Whether to include input fields.
+        - name: includeCategories
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Whether to include categories.
+        - name: searchTerm
+          in: query
+          schema:
+            type: string
+          description: Partial case-insensitive search by name, description, categories, or tags.
+      responses:
+        '200':
+          description: Successfully retrieved task list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskListResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /tasks/{id}:
+    get:
+      operationId: getTaskById
+      summary: Get agent task by ID
+      description: Retrieve a specific agent task by its unique identifier.
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the agent task.
+        - name: version
+          in: query
+          schema:
+            type: number
+          description: Agent task version to retrieve (defaults to latest).
+      responses:
+        '200':
+          description: Successfully retrieved agent task.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskGetResponse'
+        '404':
+          description: Agent task not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /tasks/{id}/run:
+    post:
+      operationId: runTask
+      summary: Run an agent task
+      description: Execute an agent task with provided context items.
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the agent task to run.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRunRequest'
+      responses:
+        '200':
+          description: Task executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskRunResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Agent task not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ─── Knowledge ───
+  /knowledge:
+    post:
+      operationId: uploadKnowledgeDocument
+      summary: Create knowledge item
+      description: Upload a file to create a new knowledge item. Supports txt, pdf, doc, and docx files (max 300MB).
+      tags:
+        - Knowledge
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - file
+              properties:
+                name:
+                  type: string
+                  maxLength: 100
+                  description: Friendly name for the knowledge item.
+                file:
+                  type: string
+                  format: binary
+                  description: File to upload (txt, pdf, doc, docx, max 300MB).
+                metadata:
+                  type: string
+                  description: JSON string of key-value metadata pairs.
+                settings:
+                  type: string
+                  description: JSON string with appVisibility and autoSummary settings.
+                summary:
+                  type: string
+                  description: Manual knowledge item summary.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Searchable tags.
+      responses:
+        '201':
+          description: Knowledge item created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      operationId: getKnowledgeDocuments
+      summary: Retrieve knowledge items
+      description: Retrieve knowledge items with optional search and filtering.
+      tags:
+        - Knowledge
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search query for knowledge items.
+        - name: size
+          in: query
+          schema:
+            type: integer
+          description: Number of items per page.
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Page number.
+      responses:
+        '200':
+          description: Successfully retrieved knowledge items.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /knowledge/{knowledgeId}:
+    get:
+      operationId: getKnowledgeDocument
+      summary: Retrieve knowledge item by ID
+      description: Retrieve a specific knowledge item by its unique identifier.
+      tags:
+        - Knowledge
+      parameters:
+        - name: knowledgeId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the knowledge item.
+      responses:
+        '200':
+          description: Successfully retrieved knowledge item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeItemResponse'
+        '404':
+          description: Knowledge item not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      operationId: updateKnowledgeDocument
+      summary: Update knowledge item
+      description: Update an existing knowledge item by its ID.
+      tags:
+        - Knowledge
+      parameters:
+        - name: knowledgeId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the knowledge item.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KnowledgeUpdateRequest'
+      responses:
+        '200':
+          description: Knowledge item updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeItemResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteKnowledgeDocument
+      summary: Delete knowledge item
+      description: Delete a knowledge item by its unique identifier.
+      tags:
+        - Knowledge
+      parameters:
+        - name: knowledgeId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the knowledge item.
+      responses:
+        '204':
+          description: Knowledge item deleted successfully.
+        '404':
+          description: Knowledge item not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /knowledge/search:
+    post:
+      operationId: searchKnowledge
+      summary: Search knowledge base
+      description: Search the knowledge base using natural language queries. Returns relevant knowledge items with content chunks ranked by relevance.
+      tags:
+        - Knowledge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KnowledgeSearchRequest'
+      responses:
+        '201':
+          description: Search completed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeSearchResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ─── Voices (Tones) ───
+  /tones:
+    post:
+      operationId: createTone
+      summary: Create a voice
+      description: Create a new brand voice/tone for content generation.
+      tags:
+        - Voices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceCreateRequest'
+      responses:
+        '201':
+          description: Voice created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      operationId: getAllTones
+      summary: Retrieve all voices
+      description: Retrieve all brand voices/tones available in your workspace.
+      tags:
+        - Voices
+      responses:
+        '200':
+          description: Successfully retrieved voices.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceListResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /tones/{toneId}:
+    get:
+      operationId: getTone
+      summary: Retrieve voice by ID
+      description: Retrieve a specific brand voice by its unique identifier.
+      tags:
+        - Voices
+      parameters:
+        - name: toneId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the voice.
+      responses:
+        '200':
+          description: Successfully retrieved voice.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceResponse'
+        '404':
+          description: Voice not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      operationId: updateTone
+      summary: Update voice by ID
+      description: Update an existing brand voice by its unique identifier.
+      tags:
+        - Voices
+      parameters:
+        - name: toneId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the voice.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceUpdateRequest'
+      responses:
+        '200':
+          description: Voice updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteTone
+      summary: Delete voice by ID
+      description: Delete a brand voice by its unique identifier.
+      tags:
+        - Voices
+      parameters:
+        - name: toneId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the voice.
+      responses:
+        '204':
+          description: Voice deleted successfully.
+        '404':
+          description: Voice not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ─── Style Guides ───
+  /styles:
+    get:
+      operationId: getStyles
+      summary: Retrieve all style guides
+      description: Returns a list of style guides available in your workspace, sorted from most recently created.
+      tags:
+        - Styles
+      responses:
+        '200':
+          description: Successfully retrieved style guides.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StyleGuideListResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /styles/{styleId}:
+    get:
+      operationId: getStyleById
+      summary: Retrieve style guide by ID
+      description: Retrieve a specific style guide by its unique identifier.
+      tags:
+        - Styles
+      parameters:
+        - name: styleId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the style guide.
+      responses:
+        '200':
+          description: Successfully retrieved style guide.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StyleGuideResponse'
+        '404':
+          description: Style guide not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ─── Documents ───
+  /documents:
+    get:
+      operationId: getAllDocuments
+      summary: Retrieve documents
+      description: Retrieve a paginated list of documents from your workspace.
+      tags:
+        - Documents
+      parameters:
+        - name: userId
+          in: query
+          schema:
+            type: string
+          description: Filter by user ID.
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 50
+          description: Maximum results per page.
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination.
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - LAST_UPDATED
+              - OLDEST_UPDATED
+              - ALPHABETICAL
+              - REVERSE_ALPHABETICAL
+              - NEWEST_CREATED
+              - OLDEST_CREATED
+          description: Sort order for documents.
+        - name: name
+          in: query
+          schema:
+            type: string
+          description: Filter documents by name.
+        - name: statuses
+          in: query
+          schema:
+            type: string
+          description: Comma-separated list of statuses to filter by (DRAFT, PUBLISHED, IN_PROGRESS, IN_REVIEW, COMPLETED).
+        - name: createdAtStart
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Start date filter (ISO format).
+        - name: createdAtEnd
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: End date filter (ISO format).
+      responses:
+        '200':
+          description: Successfully retrieved documents.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentListResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      operationId: createDocument
+      summary: Create document
+      description: Create a new document in the workspace.
+      tags:
+        - Documents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentCreateRequest'
+      responses:
+        '201':
+          description: Document created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /documents/{documentId}:
+    get:
+      operationId: getDocumentById
+      summary: Retrieve document by ID
+      description: Retrieve a specific document by its unique identifier.
+      tags:
+        - Documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the document.
+      responses:
+        '200':
+          description: Successfully retrieved document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentResponse'
+        '404':
+          description: Document not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      operationId: updateDocument
+      summary: Update document
+      description: Update an existing document by its unique identifier.
+      tags:
+        - Documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the document.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentUpdateRequest'
+      responses:
+        '200':
+          description: Document updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteDocumentById
+      summary: Delete document by ID
+      description: Delete a document by its unique identifier.
+      tags:
+        - Documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the document.
+      responses:
+        '204':
+          description: Document deleted successfully.
+        '404':
+          description: Document not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ─── Users ───
+  /users:
+    get:
+      operationId: getAllUsers
+      summary: Retrieve users
+      description: Retrieve a paginated list of users in the workspace.
+      tags:
+        - Users
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: Number of users per page.
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Page number.
+      responses:
+        '200':
+          description: Successfully retrieved users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users/{userId}:
+    get:
+      operationId: getUser
+      summary: Retrieve user by ID
+      description: Retrieve a specific user by their unique identifier.
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the user.
+      responses:
+        '200':
+          description: Successfully retrieved user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ─── Audiences ───
+  /audiences:
+    get:
+      operationId: getAudiences
+      summary: List all audiences
+      description: Retrieve all target audiences defined in the workspace.
+      tags:
+        - Audiences
+      responses:
+        '200':
+          description: Successfully retrieved audiences.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudienceListResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /audiences/{id}:
+    get:
+      operationId: getAudienceById
+      summary: Get audience by ID
+      description: Retrieve a specific target audience by its unique identifier.
+      tags:
+        - Audiences
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the audience.
+      responses:
+        '200':
+          description: Successfully retrieved audience.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudienceResponse'
+        '404':
+          description: Audience not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ─── Usage ───
+  /usage:
+    get:
+      operationId: getUsage
+      summary: Retrieve usage
+      description: Retrieve API usage metrics for your workspace.
+      tags:
+        - Usage
+      responses:
+        '200':
+          description: Successfully retrieved usage data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
