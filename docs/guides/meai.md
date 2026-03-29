@@ -3,7 +3,7 @@
 !!! tip "Cross-SDK comparison"
     See the [centralized MEAI documentation](https://tryagi.github.io/docs/meai/) for feature matrices and comparisons across all tryAGI SDKs.
 
-The Jasper AI SDK provides `AIFunction` tool wrappers compatible with [Microsoft.Extensions.AI](https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai). These tools can be used with any `IChatClient` to give AI models access to Jasper's content generation, knowledge base search, task listing, and brand voice management.
+The JasperAI SDK provides `AIFunction` tool wrappers compatible with [Microsoft.Extensions.AI](https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai). These tools can be used with any `IChatClient` to give AI models access to Jasper's content generation, knowledge base search, task listing, and brand voice management.
 
 ## Installation
 
