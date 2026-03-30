@@ -14,7 +14,7 @@ dotnet test src/tests/IntegrationTests/
 
 ## Auth
 
-API key auth via `X-API-Key` header. Constructor uses Bearer internally, converted via `Authorized` hook:
+API key auth via `X-API-Key` header (native via `--security-scheme`):
 
 ```csharp
 var client = new JasperAIClient(apiKey); // JASPERAI_API_KEY env var
@@ -23,9 +23,8 @@ var client = new JasperAIClient(apiKey); // JASPERAI_API_KEY env var
 ## Key Files
 
 - `src/libs/JasperAI/openapi.yaml` -- **Manually maintained** OpenAPI spec (no public spec from Jasper)
-- `src/libs/JasperAI/generate.sh` -- Runs autosdk with `--security-scheme Http:Header:Bearer` (no download step)
+- `src/libs/JasperAI/generate.sh` -- Runs autosdk with `--security-scheme ApiKey:Header:X-API-Key` (no download step)
 - `src/libs/JasperAI/Generated/` -- **Never edit** -- auto-generated code
-- `src/libs/JasperAI/Extensions/JasperAIClient.PrepareRequest.cs` -- Auth hook (Bearer -> X-API-Key)
 - `src/libs/JasperAI/Extensions/JasperAIClient.Tools.cs` -- MEAI `AIFunction` tools
 - `src/tests/IntegrationTests/Tests.cs` -- Test helper with API key auth
 - `src/tests/IntegrationTests/Examples/` -- Example tests (also generate docs)
@@ -106,5 +105,5 @@ AIFunction tools for use with any `IChatClient`:
 
 - Base URL: `https://api.jasper.ai/v1`
 - **No public OpenAPI spec exists** -- `openapi.yaml` was manually created from [developers.jasper.ai](https://developers.jasper.ai) docs
-- Auth: `X-API-Key` header -- `Authorized` hook sets header on HttpClient.DefaultRequestHeaders
+- Auth: `X-API-Key` header -- native via `--security-scheme ApiKey:Header:X-API-Key`
 - API requires Jasper Business plan for access
