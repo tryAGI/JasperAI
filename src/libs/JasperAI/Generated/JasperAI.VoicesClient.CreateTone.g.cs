@@ -279,6 +279,7 @@ namespace JasperAI
             global::JasperAI.VoiceSettings? settings = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
+
             var __request = new global::JasperAI.VoiceCreateRequest
             {
                 Name = name,

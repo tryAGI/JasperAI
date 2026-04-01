@@ -285,6 +285,7 @@ namespace JasperAI
             global::JasperAI.DocumentUpdateRequestStatus? status = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
+
             var __request = new global::JasperAI.DocumentUpdateRequest
             {
                 Content = content,

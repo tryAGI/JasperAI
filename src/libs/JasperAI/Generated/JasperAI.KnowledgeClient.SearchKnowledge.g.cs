@@ -269,6 +269,7 @@ namespace JasperAI
             string query,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
+
             var __request = new global::JasperAI.KnowledgeSearchRequest
             {
                 Query = query,
