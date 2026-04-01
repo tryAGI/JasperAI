@@ -281,7 +281,6 @@ namespace JasperAI
             global::JasperAI.DocumentCreateRequestStatus? status = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
-
             var __request = new global::JasperAI.DocumentCreateRequest
             {
                 UserId = userId,
