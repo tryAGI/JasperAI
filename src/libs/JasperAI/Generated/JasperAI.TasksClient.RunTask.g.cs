@@ -344,6 +344,7 @@ namespace JasperAI
             global::System.Collections.Generic.IList<global::JasperAI.TaskRunRequestTool>? tools = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
+
             var __request = new global::JasperAI.TaskRunRequest
             {
                 ContextItems = contextItems,
