@@ -5,6 +5,25 @@ namespace JasperAI
 {
     public partial class UsersClient
     {
+
+
+        private static readonly global::JasperAI.EndPointSecurityRequirement s_GetAllUsersSecurityRequirement0 =
+            new global::JasperAI.EndPointSecurityRequirement
+            {
+                Authorizations = new global::JasperAI.EndPointAuthorizationRequirement[]
+                {                    new global::JasperAI.EndPointAuthorizationRequirement
+                    {
+                        Type = "ApiKey",
+                        Location = "Header",
+                        Name = "X-API-Key",
+                        FriendlyName = "ApiKeyInHeader",
+                    },
+                },
+            };
+        private static readonly global::JasperAI.EndPointSecurityRequirement[] s_GetAllUsersSecurityRequirements =
+            new global::JasperAI.EndPointSecurityRequirement[]
+            {                s_GetAllUsersSecurityRequirement0,
+            };
         partial void PrepareGetAllUsersArguments(
             global::System.Net.Http.HttpClient httpClient,
             ref int? limit,
@@ -43,13 +62,19 @@ namespace JasperAI
                 limit: ref limit,
                 page: ref page);
 
+
+            var __authorizations = global::JasperAI.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_GetAllUsersSecurityRequirements,
+                operationName: "GetAllUsersAsync");
+
             var __pathBuilder = new global::JasperAI.PathBuilder(
                 path: "/users",
                 baseUri: HttpClient.BaseAddress); 
             __pathBuilder
                 .AddOptionalParameter("limit", limit?.ToString())
                 .AddOptionalParameter("page", page?.ToString()) 
-                ; 
+                ;
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Get,
@@ -59,7 +84,7 @@ namespace JasperAI
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")
