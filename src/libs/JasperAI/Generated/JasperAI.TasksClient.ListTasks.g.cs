@@ -5,6 +5,25 @@ namespace JasperAI
 {
     public partial class TasksClient
     {
+
+
+        private static readonly global::JasperAI.EndPointSecurityRequirement s_ListTasksSecurityRequirement0 =
+            new global::JasperAI.EndPointSecurityRequirement
+            {
+                Authorizations = new global::JasperAI.EndPointAuthorizationRequirement[]
+                {                    new global::JasperAI.EndPointAuthorizationRequirement
+                    {
+                        Type = "ApiKey",
+                        Location = "Header",
+                        Name = "X-API-Key",
+                        FriendlyName = "ApiKeyInHeader",
+                    },
+                },
+            };
+        private static readonly global::JasperAI.EndPointSecurityRequirement[] s_ListTasksSecurityRequirements =
+            new global::JasperAI.EndPointSecurityRequirement[]
+            {                s_ListTasksSecurityRequirement0,
+            };
         partial void PrepareListTasksArguments(
             global::System.Net.Http.HttpClient httpClient,
             ref int? size,
@@ -71,6 +90,12 @@ namespace JasperAI
                 includeCategories: ref includeCategories,
                 searchTerm: ref searchTerm);
 
+
+            var __authorizations = global::JasperAI.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_ListTasksSecurityRequirements,
+                operationName: "ListTasksAsync");
+
             var __pathBuilder = new global::JasperAI.PathBuilder(
                 path: "/tasks",
                 baseUri: HttpClient.BaseAddress); 
@@ -81,7 +106,7 @@ namespace JasperAI
                 .AddOptionalParameter("includeContextItems", includeContextItems?.ToString().ToLowerInvariant())
                 .AddOptionalParameter("includeCategories", includeCategories?.ToString().ToLowerInvariant())
                 .AddOptionalParameter("searchTerm", searchTerm) 
-                ; 
+                ;
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Get,
@@ -91,7 +116,7 @@ namespace JasperAI
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")

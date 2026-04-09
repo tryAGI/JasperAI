@@ -5,6 +5,25 @@ namespace JasperAI
 {
     public partial class TasksClient
     {
+
+
+        private static readonly global::JasperAI.EndPointSecurityRequirement s_RunTaskSecurityRequirement0 =
+            new global::JasperAI.EndPointSecurityRequirement
+            {
+                Authorizations = new global::JasperAI.EndPointAuthorizationRequirement[]
+                {                    new global::JasperAI.EndPointAuthorizationRequirement
+                    {
+                        Type = "ApiKey",
+                        Location = "Header",
+                        Name = "X-API-Key",
+                        FriendlyName = "ApiKeyInHeader",
+                    },
+                },
+            };
+        private static readonly global::JasperAI.EndPointSecurityRequirement[] s_RunTaskSecurityRequirements =
+            new global::JasperAI.EndPointSecurityRequirement[]
+            {                s_RunTaskSecurityRequirement0,
+            };
         partial void PrepareRunTaskArguments(
             global::System.Net.Http.HttpClient httpClient,
             ref string id,
@@ -46,9 +65,15 @@ namespace JasperAI
                 id: ref id,
                 request: request);
 
+
+            var __authorizations = global::JasperAI.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_RunTaskSecurityRequirements,
+                operationName: "RunTaskAsync");
+
             var __pathBuilder = new global::JasperAI.PathBuilder(
                 path: $"/tasks/{id}/run",
-                baseUri: HttpClient.BaseAddress); 
+                baseUri: HttpClient.BaseAddress);
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Post,
@@ -58,7 +83,7 @@ namespace JasperAI
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")

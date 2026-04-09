@@ -5,6 +5,25 @@ namespace JasperAI
 {
     public partial class UsageClient
     {
+
+
+        private static readonly global::JasperAI.EndPointSecurityRequirement s_GetUsageSecurityRequirement0 =
+            new global::JasperAI.EndPointSecurityRequirement
+            {
+                Authorizations = new global::JasperAI.EndPointAuthorizationRequirement[]
+                {                    new global::JasperAI.EndPointAuthorizationRequirement
+                    {
+                        Type = "ApiKey",
+                        Location = "Header",
+                        Name = "X-API-Key",
+                        FriendlyName = "ApiKeyInHeader",
+                    },
+                },
+            };
+        private static readonly global::JasperAI.EndPointSecurityRequirement[] s_GetUsageSecurityRequirements =
+            new global::JasperAI.EndPointSecurityRequirement[]
+            {                s_GetUsageSecurityRequirement0,
+            };
         partial void PrepareGetUsageArguments(
             global::System.Net.Http.HttpClient httpClient);
         partial void PrepareGetUsageRequest(
@@ -33,9 +52,15 @@ namespace JasperAI
             PrepareGetUsageArguments(
                 httpClient: HttpClient);
 
+
+            var __authorizations = global::JasperAI.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_GetUsageSecurityRequirements,
+                operationName: "GetUsageAsync");
+
             var __pathBuilder = new global::JasperAI.PathBuilder(
                 path: "/usage",
-                baseUri: HttpClient.BaseAddress); 
+                baseUri: HttpClient.BaseAddress);
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Get,
@@ -45,7 +70,7 @@ namespace JasperAI
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")

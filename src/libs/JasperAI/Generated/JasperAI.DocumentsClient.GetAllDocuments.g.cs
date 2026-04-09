@@ -5,6 +5,25 @@ namespace JasperAI
 {
     public partial class DocumentsClient
     {
+
+
+        private static readonly global::JasperAI.EndPointSecurityRequirement s_GetAllDocumentsSecurityRequirement0 =
+            new global::JasperAI.EndPointSecurityRequirement
+            {
+                Authorizations = new global::JasperAI.EndPointAuthorizationRequirement[]
+                {                    new global::JasperAI.EndPointAuthorizationRequirement
+                    {
+                        Type = "ApiKey",
+                        Location = "Header",
+                        Name = "X-API-Key",
+                        FriendlyName = "ApiKeyInHeader",
+                    },
+                },
+            };
+        private static readonly global::JasperAI.EndPointSecurityRequirement[] s_GetAllDocumentsSecurityRequirements =
+            new global::JasperAI.EndPointSecurityRequirement[]
+            {                s_GetAllDocumentsSecurityRequirement0,
+            };
         partial void PrepareGetAllDocumentsArguments(
             global::System.Net.Http.HttpClient httpClient,
             ref string? userId,
@@ -77,6 +96,12 @@ namespace JasperAI
                 createdAtStart: ref createdAtStart,
                 createdAtEnd: ref createdAtEnd);
 
+
+            var __authorizations = global::JasperAI.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_GetAllDocumentsSecurityRequirements,
+                operationName: "GetAllDocumentsAsync");
+
             var __pathBuilder = new global::JasperAI.PathBuilder(
                 path: "/documents",
                 baseUri: HttpClient.BaseAddress); 
@@ -89,7 +114,7 @@ namespace JasperAI
                 .AddOptionalParameter("statuses", statuses)
                 .AddOptionalParameter("createdAtStart", createdAtStart?.ToString("yyyy-MM-ddTHH:mm:ssZ"))
                 .AddOptionalParameter("createdAtEnd", createdAtEnd?.ToString("yyyy-MM-ddTHH:mm:ssZ")) 
-                ; 
+                ;
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Get,
@@ -99,7 +124,7 @@ namespace JasperAI
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")

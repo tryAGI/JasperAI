@@ -5,6 +5,25 @@ namespace JasperAI
 {
     public partial class DocumentsClient
     {
+
+
+        private static readonly global::JasperAI.EndPointSecurityRequirement s_CreateDocumentSecurityRequirement0 =
+            new global::JasperAI.EndPointSecurityRequirement
+            {
+                Authorizations = new global::JasperAI.EndPointAuthorizationRequirement[]
+                {                    new global::JasperAI.EndPointAuthorizationRequirement
+                    {
+                        Type = "ApiKey",
+                        Location = "Header",
+                        Name = "X-API-Key",
+                        FriendlyName = "ApiKeyInHeader",
+                    },
+                },
+            };
+        private static readonly global::JasperAI.EndPointSecurityRequirement[] s_CreateDocumentSecurityRequirements =
+            new global::JasperAI.EndPointSecurityRequirement[]
+            {                s_CreateDocumentSecurityRequirement0,
+            };
         partial void PrepareCreateDocumentArguments(
             global::System.Net.Http.HttpClient httpClient,
             global::JasperAI.DocumentCreateRequest request);
@@ -41,9 +60,15 @@ namespace JasperAI
                 httpClient: HttpClient,
                 request: request);
 
+
+            var __authorizations = global::JasperAI.EndPointSecurityResolver.ResolveAuthorizations(
+                availableAuthorizations: Authorizations,
+                securityRequirements: s_CreateDocumentSecurityRequirements,
+                operationName: "CreateDocumentAsync");
+
             var __pathBuilder = new global::JasperAI.PathBuilder(
                 path: "/documents",
-                baseUri: HttpClient.BaseAddress); 
+                baseUri: HttpClient.BaseAddress);
             var __path = __pathBuilder.ToString();
             using var __httpRequest = new global::System.Net.Http.HttpRequestMessage(
                 method: global::System.Net.Http.HttpMethod.Post,
@@ -53,7 +78,7 @@ namespace JasperAI
             __httpRequest.VersionPolicy = global::System.Net.Http.HttpVersionPolicy.RequestVersionOrHigher;
 #endif
 
-            foreach (var __authorization in Authorizations)
+            foreach (var __authorization in __authorizations)
             {
                 if (__authorization.Type == "Http" ||
                     __authorization.Type == "OAuth2")
