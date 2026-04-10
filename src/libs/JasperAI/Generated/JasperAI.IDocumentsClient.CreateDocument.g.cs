@@ -9,11 +9,13 @@ namespace JasperAI
         /// Create a new document in the workspace.
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
         /// <param name="cancellationToken">The token to cancel the operation with</param>
         /// <exception cref="global::JasperAI.ApiException"></exception>
         global::System.Threading.Tasks.Task<global::JasperAI.DocumentResponse> CreateDocumentAsync(
 
             global::JasperAI.DocumentCreateRequest request,
+            global::JasperAI.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
         /// Create document<br/>
@@ -31,6 +33,7 @@ namespace JasperAI
         /// <param name="status">
         /// The status of the document.
         /// </param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
         /// <param name="cancellationToken">The token to cancel the operation with</param>
         /// <exception cref="global::System.InvalidOperationException"></exception>
         global::System.Threading.Tasks.Task<global::JasperAI.DocumentResponse> CreateDocumentAsync(
@@ -38,6 +41,7 @@ namespace JasperAI
             string content,
             string name,
             global::JasperAI.DocumentCreateRequestStatus? status = default,
+            global::JasperAI.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default);
     }
 }
