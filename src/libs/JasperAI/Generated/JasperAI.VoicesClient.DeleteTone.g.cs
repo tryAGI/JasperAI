@@ -120,7 +120,7 @@ namespace JasperAI
                 PrepareDeleteToneRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    toneId: toneId);
+                    toneId: toneId!);
 
                 return __httpRequest;
             }

@@ -120,7 +120,7 @@ namespace JasperAI
                 PrepareDeleteDocumentByIdRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    documentId: documentId);
+                    documentId: documentId!);
 
                 return __httpRequest;
             }
