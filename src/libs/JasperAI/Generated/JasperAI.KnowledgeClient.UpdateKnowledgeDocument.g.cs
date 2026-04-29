@@ -139,7 +139,7 @@ namespace JasperAI
                 PrepareUpdateKnowledgeDocumentRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    knowledgeId: knowledgeId,
+                    knowledgeId: knowledgeId!,
                     request: request);
 
                 return __httpRequest;

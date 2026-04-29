@@ -120,7 +120,7 @@ namespace JasperAI
                 PrepareDeleteKnowledgeDocumentRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    knowledgeId: knowledgeId);
+                    knowledgeId: knowledgeId!);
 
                 return __httpRequest;
             }

@@ -125,7 +125,7 @@ namespace JasperAI
                 PrepareGetToneRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    toneId: toneId);
+                    toneId: toneId!);
 
                 return __httpRequest;
             }
