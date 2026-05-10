@@ -42,5 +42,6 @@ namespace JasperAI
         public KnowledgeSearchRequest()
         {
         }
+
     }
 }

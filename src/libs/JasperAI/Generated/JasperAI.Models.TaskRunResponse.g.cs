@@ -62,5 +62,6 @@ namespace JasperAI
         public TaskRunResponse()
         {
         }
+
     }
 }

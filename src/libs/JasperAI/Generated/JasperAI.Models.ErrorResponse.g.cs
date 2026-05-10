@@ -57,5 +57,6 @@ namespace JasperAI
         public ErrorResponse()
         {
         }
+
     }
 }

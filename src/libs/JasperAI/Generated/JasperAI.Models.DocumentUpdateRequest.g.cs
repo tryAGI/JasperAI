@@ -64,5 +64,6 @@ namespace JasperAI
         public DocumentUpdateRequest()
         {
         }
+
     }
 }

@@ -78,5 +78,6 @@ namespace JasperAI
         public DocumentCreateRequest()
         {
         }
+
     }
 }

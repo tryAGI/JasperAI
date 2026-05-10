@@ -95,5 +95,6 @@ namespace JasperAI
         public Voice()
         {
         }
+
     }
 }

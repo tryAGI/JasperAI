@@ -110,5 +110,6 @@ namespace JasperAI
         public UploadKnowledgeDocumentRequest()
         {
         }
+
     }
 }
