@@ -134,5 +134,6 @@ namespace JasperAI
         public KnowledgeItem()
         {
         }
+
     }
 }

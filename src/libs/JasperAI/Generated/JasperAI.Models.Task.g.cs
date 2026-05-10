@@ -174,5 +174,6 @@ namespace JasperAI
         public Task()
         {
         }
+
     }
 }

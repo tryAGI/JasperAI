@@ -41,5 +41,6 @@ namespace JasperAI
         public WebScraperOptions()
         {
         }
+
     }
 }

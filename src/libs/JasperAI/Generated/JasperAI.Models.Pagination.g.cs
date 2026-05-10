@@ -85,5 +85,6 @@ namespace JasperAI
         public Pagination()
         {
         }
+
     }
 }
