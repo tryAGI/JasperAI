@@ -74,5 +74,6 @@ namespace JasperAI
         public User()
         {
         }
+
     }
 }

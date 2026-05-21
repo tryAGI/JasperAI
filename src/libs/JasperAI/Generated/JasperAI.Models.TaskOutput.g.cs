@@ -53,5 +53,6 @@ namespace JasperAI
         public TaskOutput()
         {
         }
+
     }
 }

@@ -49,5 +49,6 @@ namespace JasperAI
         public CommandRequest()
         {
         }
+
     }
 }

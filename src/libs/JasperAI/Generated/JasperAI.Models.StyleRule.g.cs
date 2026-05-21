@@ -66,5 +66,6 @@ namespace JasperAI
         public StyleRule()
         {
         }
+
     }
 }

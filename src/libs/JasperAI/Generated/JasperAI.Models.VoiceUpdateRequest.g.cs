@@ -72,5 +72,6 @@ namespace JasperAI
         public VoiceUpdateRequest()
         {
         }
+
     }
 }

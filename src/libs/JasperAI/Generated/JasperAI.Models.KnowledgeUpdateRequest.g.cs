@@ -83,5 +83,6 @@ namespace JasperAI
         public KnowledgeUpdateRequest()
         {
         }
+
     }
 }

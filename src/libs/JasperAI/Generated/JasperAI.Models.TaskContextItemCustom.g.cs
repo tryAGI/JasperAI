@@ -79,5 +79,6 @@ namespace JasperAI
         public TaskContextItemCustom()
         {
         }
+
     }
 }

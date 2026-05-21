@@ -24,6 +24,21 @@ namespace JasperAI
         /// Update an existing knowledge item by its ID.
         /// </summary>
         /// <param name="knowledgeId"></param>
+        /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        /// <exception cref="global::JasperAI.ApiException"></exception>
+        global::System.Threading.Tasks.Task<global::JasperAI.AutoSDKHttpResponse<global::JasperAI.KnowledgeItemResponse>> UpdateKnowledgeDocumentAsResponseAsync(
+            string knowledgeId,
+
+            global::JasperAI.KnowledgeUpdateRequest request,
+            global::JasperAI.AutoSDKRequestOptions? requestOptions = default,
+            global::System.Threading.CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Update knowledge item<br/>
+        /// Update an existing knowledge item by its ID.
+        /// </summary>
+        /// <param name="knowledgeId"></param>
         /// <param name="name">
         /// Updated name (max 100 chars).
         /// </param>
