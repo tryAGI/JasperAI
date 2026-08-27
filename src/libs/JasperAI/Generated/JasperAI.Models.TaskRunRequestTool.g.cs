@@ -4,16 +4,16 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum TaskRunRequestTool
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         KnowledgeSearch,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         WebSearch,
     }

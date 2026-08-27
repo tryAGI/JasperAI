@@ -4,20 +4,20 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum ListTasksScope
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Public,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         User,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Workspace,
     }

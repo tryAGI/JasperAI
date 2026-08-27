@@ -9,15 +9,15 @@ namespace JasperAI
     public enum CommandOptionsLanguageFormality
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Default,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Less,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         More,
     }

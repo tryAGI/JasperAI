@@ -10,11 +10,11 @@ namespace JasperAI
     public enum VoiceSettingsAppVisibility
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Hidden,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Visible,
     }

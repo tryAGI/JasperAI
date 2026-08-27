@@ -4,32 +4,32 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum GetAllDocumentsSort
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Alphabetical,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         LastUpdated,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         NewestCreated,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OldestCreated,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OldestUpdated,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         ReverseAlphabetical,
     }

@@ -4,7 +4,7 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class KnowledgeItem
     {
@@ -33,7 +33,7 @@ namespace JasperAI
         public global::System.Collections.Generic.Dictionary<string, string>? Metadata { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("settings")]
         public global::JasperAI.KnowledgeSettings? Settings { get; set; }
@@ -57,13 +57,13 @@ namespace JasperAI
         public string? ProcessingState { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("createdAt")]
         public global::System.DateTime? CreatedAt { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("updatedAt")]
         public global::System.DateTime? UpdatedAt { get; set; }

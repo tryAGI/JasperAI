@@ -9,7 +9,7 @@ namespace JasperAI
     public enum TaskOutputType
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Text,
     }

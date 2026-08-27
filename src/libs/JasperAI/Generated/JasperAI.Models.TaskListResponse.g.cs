@@ -4,12 +4,12 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TaskListResponse
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("requestId")]
         public string? RequestId { get; set; }
@@ -22,13 +22,13 @@ namespace JasperAI
         public string? Resource { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("data")]
         public global::System.Collections.Generic.IList<global::JasperAI.Task>? Data { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("pagination")]
         public global::JasperAI.Pagination? Pagination { get; set; }

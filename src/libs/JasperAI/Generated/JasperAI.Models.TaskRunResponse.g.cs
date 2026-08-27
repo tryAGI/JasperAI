@@ -4,7 +4,7 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TaskRunResponse
     {
@@ -22,7 +22,7 @@ namespace JasperAI
         public string? Resource { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("data")]
         public global::JasperAI.TaskRunResponseData? Data { get; set; }

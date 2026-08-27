@@ -4,7 +4,7 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class KnowledgeUpdateRequest
     {
@@ -21,7 +21,7 @@ namespace JasperAI
         public global::System.Collections.Generic.Dictionary<string, string>? Metadata { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("settings")]
         public global::JasperAI.KnowledgeSettings? Settings { get; set; }

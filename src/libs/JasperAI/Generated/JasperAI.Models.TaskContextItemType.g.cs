@@ -4,48 +4,48 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum TaskContextItemType
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Checkbox,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Custom,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         ImageId,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Input,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Knowledge,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Multiselect,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Select,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         TagsInput,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Textarea,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Tool,
     }

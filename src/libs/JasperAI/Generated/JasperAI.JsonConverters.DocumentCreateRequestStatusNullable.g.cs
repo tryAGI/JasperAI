@@ -20,7 +20,7 @@ namespace JasperAI.JsonConverters
                     {
                         return global::JasperAI.DocumentCreateRequestStatusExtensions.ToEnum(stringValue);
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:
