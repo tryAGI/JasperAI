@@ -10,11 +10,11 @@ namespace JasperAI
     public enum CommandOptionsCompletionType
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Performance,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Quality,
     }

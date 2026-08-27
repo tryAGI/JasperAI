@@ -9,15 +9,15 @@ namespace JasperAI
     public enum TaskScope
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Public,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         User,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Workspace,
     }

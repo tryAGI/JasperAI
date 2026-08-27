@@ -9,11 +9,11 @@ namespace JasperAI
     public enum CommandInputsRetrievalAddOn
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         WebScraper,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         WebSearch,
     }

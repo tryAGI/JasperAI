@@ -41,7 +41,7 @@ namespace JasperAI
         internal global::System.Lazy<global::System.Text.Json.Serialization.JsonSerializerContext> JsonSerializerContextProvider { get; set; } = new(() => global::JasperAI.SourceGenerationContext.Default);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::System.Text.Json.Serialization.JsonSerializerContext JsonSerializerContext
         {
@@ -51,7 +51,7 @@ namespace JasperAI
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public AudiencesClient Audiences => new AudiencesClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -60,7 +60,7 @@ namespace JasperAI
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public CommandClient Command => new CommandClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -69,7 +69,7 @@ namespace JasperAI
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public DocumentsClient Documents => new DocumentsClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -78,7 +78,7 @@ namespace JasperAI
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public KnowledgeClient Knowledge => new KnowledgeClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -87,7 +87,7 @@ namespace JasperAI
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public StylesClient Styles => new StylesClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -96,7 +96,7 @@ namespace JasperAI
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TasksClient Tasks => new TasksClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -105,7 +105,7 @@ namespace JasperAI
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public UsageClient Usage => new UsageClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -114,7 +114,7 @@ namespace JasperAI
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public UsersClient Users => new UsersClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {
@@ -123,7 +123,7 @@ namespace JasperAI
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public VoicesClient Voices => new VoicesClient(HttpClient, baseUri: null, authorizations: Authorizations, options: Options)
         {

@@ -145,7 +145,7 @@ namespace JasperAI
                          __authorization.Location == "Header")
                 {
                     __httpRequest.Headers.Add(__authorization.Name, __authorization.Value);
-                } 
+                }
             }
                 global::JasperAI.AutoSDKRequestOptionsSupport.ApplyHeaders(
                     request: __httpRequest,

@@ -10,11 +10,11 @@ namespace JasperAI
     public enum KnowledgeSettingsAppVisibility
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Hidden,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Visible,
     }

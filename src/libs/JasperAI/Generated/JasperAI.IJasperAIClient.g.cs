@@ -43,53 +43,53 @@ namespace JasperAI
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         global::System.Text.Json.Serialization.JsonSerializerContext JsonSerializerContext { get; set; }
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public AudiencesClient Audiences { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public CommandClient Command { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public DocumentsClient Documents { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public KnowledgeClient Knowledge { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public StylesClient Styles { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TasksClient Tasks { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public UsageClient Usage { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public UsersClient Users { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public VoicesClient Voices { get; }
 

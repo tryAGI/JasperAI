@@ -4,7 +4,7 @@
 namespace JasperAI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class CommandOptions
     {
@@ -37,13 +37,13 @@ namespace JasperAI
         public global::JasperAI.CommandOptionsLanguageFormality? LanguageFormality { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("webScraper")]
         public global::JasperAI.WebScraperOptions? WebScraper { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("webSearch")]
         public global::JasperAI.WebSearchOptions? WebSearch { get; set; }
