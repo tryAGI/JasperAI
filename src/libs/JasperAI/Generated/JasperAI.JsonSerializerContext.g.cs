@@ -68,6 +68,7 @@ namespace JasperAI
             typeof(global::JasperAI.JsonConverters.UnixTimestampJsonConverter),
         })]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::JasperAI.JsonSerializerContextTypes))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.List<object>), TypeInfoPropertyName = "SystemCollectionsGeneric_ObjectList")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::JasperAI.CommandRequest))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::JasperAI.CommandInputs))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::JasperAI.CommandOptions))]
