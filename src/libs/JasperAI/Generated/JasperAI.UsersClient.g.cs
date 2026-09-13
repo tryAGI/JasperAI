@@ -34,7 +34,7 @@ namespace JasperAI
         /// <inheritdoc/>
         public global::JasperAI.AutoSDKClientOptions Options { get; }
 
-        internal global::System.Lazy<global::System.Text.Json.Serialization.JsonSerializerContext> JsonSerializerContextProvider { get; set; } = new(() => global::JasperAI.SourceGenerationContext.Default);
+        internal global::System.Lazy<global::System.Text.Json.Serialization.JsonSerializerContext> JsonSerializerContextProvider { get; set; } = new(() => global::JasperAI.UsersSourceGenerationContext.Default);
 
         /// <summary>
         ///
